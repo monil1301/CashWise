@@ -12,7 +12,20 @@
           "package_name": "com.shah.cashwise"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1054958096454-82c8ofdt1f7mtaoqdmi8737fuf9qooqs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shah.cashwise",
+            "certificate_hash": "f1a04ba501fd1c1d33f26f01694738bcbe91eaca"
+          }
+        },
+        {
+          "client_id": "1054958096454-mav2ouv6j6t63d3qi2b0r940fe46ogad.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyB9KgVl0KkCSPQ3hmiEr1-5hL0rY8goqtE"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1054958096454-mav2ouv6j6t63d3qi2b0r940fe46ogad.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
