@@ -1,5 +1,6 @@
 [versions]
 agp = "8.7.3"
+hiltAndroid = "2.51.1"
 kotlin = "2.0.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -11,11 +12,14 @@ composeBom = "2024.04.01"
 firebase = "4.4.2"
 firebaseBOM = "33.10.0"
 daggerHilt = "2.51.1"
+androidHilt = "1.2.0"
 retrofit = "2.9.0"
 squareup = "4.11.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -40,8 +44,7 @@ retrofit2-convertor = { group = "com.squareup.retrofit2", name = "converter-gson
 
 squareup-okhttp = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "squareup" }
 
-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "daggerHilt" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "daggerHilt" }
+hilt-nav-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidHilt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -49,4 +52,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 google-firebase = { id = "com.google.gms.google-services", version.ref = "firebase" }
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt"}
+kapt = { id = "kotlin-kapt"}
 
