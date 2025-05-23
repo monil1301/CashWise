@@ -11,9 +11,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.shah.cashwise.ui.screen.LoginScreen
+import com.shah.cashwise.ui.screen.AuthScreen
 import com.shah.cashwise.ui.theme.CashWiseTheme
 import dagger.hilt.android.AndroidEntryPoint
+
+/**
+ * Created by Monil on 25/04/25.
+ */
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -27,7 +31,7 @@ class MainActivity : ComponentActivity() {
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
                     )
-                    LoginScreen()
+                    AuthScreen()
                 }
             }
         }

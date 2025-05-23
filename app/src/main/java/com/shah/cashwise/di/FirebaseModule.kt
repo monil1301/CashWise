@@ -7,6 +7,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * Created by Monil on 19/03/25.
+ */
+
 @Module
 @InstallIn(SingletonComponent::class) // Singleton scope
 object FirebaseModule {

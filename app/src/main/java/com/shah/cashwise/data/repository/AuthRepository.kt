@@ -4,48 +4,65 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.shah.cashwise.utils.AuthResult
+import com.shah.cashwise.data.api.AuthApi
+import com.shah.cashwise.data.model.auth.FirebaseUserSignUp
+import com.shah.cashwise.data.model.auth.User
+import com.shah.cashwise.utils.ResponseResource
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Created by Monil on 18/03/25.
+ */
+
 @Singleton
-class AuthRepository @Inject constructor(private val firebaseAuth: FirebaseAuth) {
+class AuthRepository @Inject constructor(
+    private val firebaseAuth: FirebaseAuth,
+    private val api: AuthApi
+) : BaseRepository() {
 
     // Register user
-    suspend fun registerUser(email: String, password: String): AuthResult<FirebaseUser> {
+    suspend fun registerUser(user: FirebaseUserSignUp): ResponseResource<FirebaseUser> {
         return try {
-            val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-            AuthResult.Success(result.user!!)
+            val result =
+                firebaseAuth.createUserWithEmailAndPassword(user.email, user.password).await()
+            ResponseResource.Success(result.user!!)
         } catch (e: FirebaseAuthException) {
-            AuthResult.Failure(e.message ?: "Error occurred in creating user." )
+            ResponseResource.Failure(false,e.message ?: "Error occurred in creating user.")
         } catch (e: Exception) {
-            AuthResult.Failure(e.message ?: "Something went wrong. Please try again.")
+            ResponseResource.Failure(false,e.message ?: "Something went wrong. Please try again.")
         }
     }
+
+    suspend fun registerUserWithBackend(user: User) =
+        safeApiCall { api.registerUser(user) }
 
     // Login user
-    suspend fun loginUser(email: String, password: String): AuthResult<FirebaseUser> {
+    suspend fun loginUser(user: FirebaseUserSignUp): ResponseResource<FirebaseUser> {
         return try {
-            val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
-            AuthResult.Success(result.user!!)
+            val result = firebaseAuth.signInWithEmailAndPassword(user.email, user.password).await()
+            ResponseResource.Success(result.user!!)
         } catch (e: FirebaseAuthException) {
-            AuthResult.Failure(e.message ?: "Error occurred in logging in." )
+            ResponseResource.Failure(false,e.message ?: "Error occurred in logging in.")
         } catch (e: Exception) {
-            AuthResult.Failure(e.message ?: "Something went wrong. Please try again.")
+            ResponseResource.Failure(false,e.message ?: "Something went wrong. Please try again.")
         }
     }
 
+    suspend fun loginUserWithBackend(user: User) =
+        safeApiCall { api.loginUser(user) }
+
     // Sign in with Google
-    suspend fun signInWithGoogle(idToken: String): AuthResult<FirebaseUser> {
+    suspend fun signInWithGoogle(idToken: String): ResponseResource<FirebaseUser> {
         return try {
             val credential = GoogleAuthProvider.getCredential(idToken, null)
             val result = firebaseAuth.signInWithCredential(credential).await()
-            AuthResult.Success(result.user!!)
+            ResponseResource.Success(result.user!!)
         } catch (e: FirebaseAuthException) {
-            AuthResult.Failure(e.message ?: "Error occurred in signing in with Google." )
+            ResponseResource.Failure(false,e.message ?: "Error occurred in signing in with Google.")
         } catch (e: Exception) {
-            AuthResult.Failure(e.message ?: "Something went wrong. Please try again.")
+            ResponseResource.Failure(false,e.message ?: "Something went wrong. Please try again.")
         }
     }
 

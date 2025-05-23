@@ -63,6 +63,10 @@ dependencies {
     implementation(libs.retrofit2.retrofit)
     implementation(libs.retrofit2.convertor)
 
+    // Moshi
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
+
     // OkHttp3
     implementation(libs.squareup.okhttp)
 

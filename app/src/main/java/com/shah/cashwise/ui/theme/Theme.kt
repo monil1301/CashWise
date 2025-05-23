@@ -1,36 +1,89 @@
 package com.shah.cashwise.ui.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
+/**
+ * Created by Monil on 29/03/25.
+ */
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = GreenFruitSalad,
+    onPrimary = White,
+    primaryContainer = GreenFringyFlower,
+    onPrimaryContainer = GreenParsley,
+    inversePrimary = GreenDeYork,
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    secondary = BlueDodger,
+    onSecondary = White,
+    secondaryContainer = BlueTropical,
+    onSecondaryContainer = BlueCobalt,
+
+    tertiary = YellowAmber,
+    onTertiary = Black,
+    tertiaryContainer = YellowSaharaSand,
+    onTertiaryContainer = BrownWoody,
+
+    background = WhiteAlabaster,
+    onBackground = BlackMineShaft,
+    surface = White,
+    onSurface = BlackMineShaft,
+    surfaceVariant = GrayAlto,
+    onSurfaceVariant = GrayTundora,
+    surfaceTint = GreenFruitSalad,
+
+    inverseSurface = GrayCharade,
+    inverseOnSurface = WhiteAlabaster,
+
+    error = RedTorch,
+    onError = White,
+    errorContainer = RedPale,
+    onErrorContainer = RedCrimson,
+
+    outline = GraySilver,
+    outlineVariant = GrayAlto,
+    scrim = BlackTranslucent
+)
+
+private val DarkColorScheme = darkColorScheme(
+    primary = GreenDeYork,
+    onPrimary = Black,
+    primaryContainer = GreenSalem,
+    onPrimaryContainer = GreenFringyFlower,
+    inversePrimary = GreenFruitSalad,
+
+    secondary = BlueMalibu,
+    onSecondary = Black,
+    secondaryContainer = BlueYale,
+    onSecondaryContainer = BlueTropical,
+
+    tertiary = YellowMustard,
+    onTertiary = Black,
+    tertiaryContainer = BrownCedar,
+    onTertiaryContainer = YellowCream,
+
+    background = GrayCod,
+    onBackground = GrayAlto,
+    surface = GrayShark,
+    onSurface = GrayAlto,
+    surfaceVariant = GrayCharade,
+    onSurfaceVariant = GrayBlueSmoke,
+    surfaceTint = GreenDeYork,
+
+    inverseSurface = GrayAlto,
+    inverseOnSurface = GrayShark,
+
+    error = RedRose,
+    onError = Black,
+    errorContainer = RedCrimson,
+    onErrorContainer = RedPale,
+
+    outline = GrayDove,
+    outlineVariant = GrayBoulder,
+    scrim = BlackTranslucent
 )
 
 @Composable
@@ -41,10 +94,10 @@ fun CashWiseTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+//        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+//            val context = LocalContext.current
+//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+//        }
 
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
