@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -38,16 +39,17 @@ fun PrimaryButton(
     imageResource: ImageResource = ImageResource.None,
     textStyle: TextStyle = MaterialTheme.typography.headlineSmall,
     iconPosition: ViewPosition = ViewPosition.START,
-    contentPadding: PaddingValues = ButtonDefaults.ContentPadding
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    colors: ButtonColors = ButtonDefaults.buttonColors(
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary
+    )
 ) {
     Button(
         modifier = modifier,
         onClick = onClick,
         enabled = enabled,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary
-        ),
+        colors = colors,
         shape = RoundedCornerShape(20),
         contentPadding = contentPadding
     ) {
@@ -57,14 +59,19 @@ fun PrimaryButton(
         ) {
             if (!isLoading) {
                 if (iconPosition == ViewPosition.START)
-                    ShowImageFromResource(imageResource, Modifier.size(50.dp).padding(end = 10.dp))
+                    ShowImageFromResource(imageResource,
+                        Modifier
+                            .size(50.dp)
+                            .padding(end = 10.dp))
 
                 Text(text, style = textStyle)
 
                 if (iconPosition == ViewPosition.END)
                     ShowImageFromResource(
                         imageResource,
-                        Modifier.size(50.dp).padding(start = 10.dp)
+                        Modifier
+                            .size(50.dp)
+                            .padding(start = 10.dp)
                     )
             } else {
                 CircularProgressIndicator(

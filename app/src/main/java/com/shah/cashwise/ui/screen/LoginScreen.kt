@@ -13,25 +13,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.shah.cashwise.R
-import com.shah.cashwise.data.model.auth.FirebaseUserSignUp
-import com.shah.cashwise.data.model.auth.response.AuthUserResponse
 import com.shah.cashwise.ui.components.auth.AuthMethodsSeparator
 import com.shah.cashwise.ui.components.auth.LoginHeader
+import com.shah.cashwise.ui.components.common.PasswordTextField
 import com.shah.cashwise.ui.components.common.PrimaryButton
 import com.shah.cashwise.ui.components.common.PrimaryTextField
+import com.shah.cashwise.ui.viewmodel.AuthViewModel
 import com.shah.cashwise.utils.ImageResource
 import com.shah.cashwise.utils.ResponseResource
-import com.shah.cashwise.utils.extensions.isValidEmail
-import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Created by Monil on 29/03/25.
@@ -39,17 +35,11 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun LoginScreen(
-    authState: StateFlow<ResponseResource<AuthUserResponse>?>,
-    onGoogleLogin: () -> Unit,
-    onLogin: (user: FirebaseUserSignUp) -> Unit
+    viewModel: AuthViewModel = hiltViewModel()
 ) {
-    var emailError by remember { mutableStateOf<String?>(null) }
-    var passwordError by remember { mutableStateOf<String?>(null) }
-
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-
-    val state = authState.collectAsState()
+    val formState = viewModel.loginFormState
+    val authState = viewModel.authState.collectAsState().value
+    val focusManager = LocalFocusManager.current
 
     Column(
         modifier = Modifier
@@ -72,22 +62,20 @@ fun LoginScreen(
             PrimaryTextField(
                 modifier = Modifier.fillMaxWidth(),
                 label = "Email Address",
-                error = emailError,
-                enabled = state.value != ResponseResource.Loading
+                error = formState.emailError,
+                enabled = authState != ResponseResource.Loading
             ) {
-                email = it
-                emailError = null
+                viewModel.onEmailChanged(it)
             }
 
-            PrimaryTextField(
-                modifier = Modifier.fillMaxWidth(),
-                label = "Password",
-                error = passwordError,
-                enabled = state.value != ResponseResource.Loading
-            ) {
-                password = it
-                passwordError = null
-            }
+            PasswordTextField(
+                error = formState.passwordError,
+                isEnabled = authState != ResponseResource.Loading,
+                focusManager = focusManager,
+                onPasswordChange = {
+                    viewModel.onPasswordChanged(it)
+                }
+            )
         }
 
         Spacer(Modifier.height(16.dp))
@@ -96,19 +84,11 @@ fun LoginScreen(
             Modifier
                 .fillMaxWidth()
                 .height(50.dp),
-            if (state.value != ResponseResource.Loading) "Login" else "",
-            enabled = state.value != ResponseResource.Loading,
+            if (authState != ResponseResource.Loading) "Login" else "",
+            enabled = authState != ResponseResource.Loading,
             onClick = {
-                if (!email.isValidEmail())
-                    emailError = "Email is invalid"
-
-                if (password.isBlank() || password.length < 6)
-                    passwordError = "Password should be at least 6 characters"
-
-                if (emailError == null && passwordError == null) {
-                    onLogin(FirebaseUserSignUp(email = email, password = password))
-                    Log.d("SignUp", "Login clicked")
-                }
+                Log.d("Login", "Login clicked")
+                viewModel.validateAndLogin()
             }
         )
 
@@ -132,7 +112,7 @@ fun LoginScreen(
                 "Google"
             ),
             onClick = {
-                onGoogleLogin()
+//                onGoogleLogin()
             }
         )
 

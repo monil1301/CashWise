@@ -13,11 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -35,7 +32,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AuthScreen(viewModel: AuthViewModel = hiltViewModel()) {
-    var isRegistering by remember { mutableStateOf(true) }
     val state = viewModel.authState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -72,8 +68,8 @@ fun AuthScreen(viewModel: AuthViewModel = hiltViewModel()) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            SwitchAuthTypeHeader(isRegistering) {
-                isRegistering = !isRegistering
+            SwitchAuthTypeHeader(viewModel.isRegistering) {
+                viewModel.isRegistering = !viewModel.isRegistering
             }
 
             Text(
@@ -82,16 +78,10 @@ fun AuthScreen(viewModel: AuthViewModel = hiltViewModel()) {
                 style = MaterialTheme.typography.displayMedium
             )
 
-            if (isRegistering)
-                SignUp(viewModel.authState, {
-//                    viewModel.signInWithGoogle()
-                }) {
-                    viewModel.registerUser(it)
-                }
+            if (viewModel.isRegistering)
+                SignUp()
             else
-                LoginScreen(viewModel.authState, {}) {
-                    viewModel.loginUser(it)
-                }
+                LoginScreen()
         }
     }
 }
