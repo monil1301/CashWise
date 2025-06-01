@@ -57,7 +57,7 @@ fun Onboarding(
             R.string.onboarding_description_2
         ),
         OnboardingPage(
-            R.drawable.take_control,
+            R.drawable.plan_ahead,
             R.string.onboarding_title_3,
             R.string.onboarding_description_3
         )
