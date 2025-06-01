@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">CashWise</string>
+
+
+    <!-- Onboarding Screen 1 -->
+    <string name="onboarding_title_1">Take Charge of Your Money</string>
+    <string name="onboarding_description_1">Build strong financial habits and confidently manage every dollar you earn.</string>
+
+    <!-- Onboarding Screen 2 -->
+    <string name="onboarding_title_2">Track Every Transaction</string>
+    <string name="onboarding_description_2">See where your money goes with smart insights and automatic spending categories.</string>
+
+    <!-- Onboarding Screen 3 -->
+    <string name="onboarding_title_3">Plan with Purpose</string>
+    <string name="onboarding_description_3">Set monthly budgets, track progress, and stay in control of your financial goals.</string>
+
+    <string name="next">Next</string>
+    <string name="get_started">Get Started</string>
+
 </resources>

@@ -11,14 +11,17 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.shah.cashwise.R
 import com.shah.cashwise.ui.theme.CashWiseTheme
@@ -37,8 +40,9 @@ fun PrimaryButton(
     enabled: Boolean = true,
     isLoading: Boolean = false,
     imageResource: ImageResource = ImageResource.None,
-    textStyle: TextStyle = MaterialTheme.typography.headlineSmall,
+    textStyle: TextStyle = MaterialTheme.typography.titleSmall,
     iconPosition: ViewPosition = ViewPosition.START,
+    iconSize: Dp = 50.dp,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     colors: ButtonColors = ButtonDefaults.buttonColors(
         containerColor = MaterialTheme.colorScheme.primary,
@@ -61,8 +65,9 @@ fun PrimaryButton(
                 if (iconPosition == ViewPosition.START)
                     ShowImageFromResource(imageResource,
                         Modifier
-                            .size(50.dp)
-                            .padding(end = 10.dp))
+                            .size(iconSize)
+                            .padding(end = 10.dp),
+                        colors.contentColor)
 
                 Text(text, style = textStyle)
 
@@ -70,8 +75,9 @@ fun PrimaryButton(
                     ShowImageFromResource(
                         imageResource,
                         Modifier
-                            .size(50.dp)
-                            .padding(start = 10.dp)
+                            .size(iconSize)
+                            .padding(start = 10.dp),
+                        colors.contentColor
                     )
             } else {
                 CircularProgressIndicator(
@@ -83,13 +89,14 @@ fun PrimaryButton(
 }
 
 @Composable
-fun ShowImageFromResource(imageResource: ImageResource, modifier: Modifier) {
+fun ShowImageFromResource(imageResource: ImageResource, modifier: Modifier, contentColor: Color) {
     when (imageResource) {
         is ImageResource.IconResource -> {
-            Image(
+            Icon(
                 imageResource.icon,
                 imageResource.contentDescription,
-                modifier = modifier
+                modifier = modifier,
+                tint = contentColor
             )
         }
 
