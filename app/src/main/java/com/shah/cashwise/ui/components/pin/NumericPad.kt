@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Backspace
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.Backspace
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -160,7 +160,7 @@ fun NumericButton(
     ) {
         if (buttonType != NumericPadButtonType.NUMBER)
             Icon(
-                if(buttonType == NumericPadButtonType.NEXT) Icons.Filled.ArrowForward else Icons.Filled.Backspace,
+                if(buttonType == NumericPadButtonType.NEXT) Icons.AutoMirrored.Filled.ArrowForward else Icons.AutoMirrored.Filled.Backspace,
                 "",
                 Modifier.size(44.dp)
             )
