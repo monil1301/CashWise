@@ -1,4 +1,4 @@
-package com.shah.cashwise.ui.screen
+package com.shah.cashwise.ui.components.pin
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,9 +28,14 @@ import com.shah.cashwise.ui.theme.CashWiseTheme
  */
 
 @Composable
-fun PinScreen(title: String) {
+fun PinInputView(title: String, resetKey: Int, onPinComplete: (String) -> Unit) {
     var pinLength by remember { mutableIntStateOf(0) }
     val pin = StringBuilder()
+
+    if (resetKey > 0) {
+        pin.clear()
+        pinLength = 0
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.primary,
@@ -52,7 +57,7 @@ fun PinScreen(title: String) {
 
                 Spacer(Modifier.height(92.dp))
 
-                PinDotRow(4, pinLength)
+                PinDotRow(4, pinLength, resetKey)
             }
 
             NumericPad({
@@ -63,6 +68,8 @@ fun PinScreen(title: String) {
             }) {
                 pin.append(it)
                 pinLength++
+
+                if (pinLength == 4) onPinComplete(pin.toString())
             }
         }
     }
@@ -72,6 +79,6 @@ fun PinScreen(title: String) {
 @Composable
 fun PreviewPinScreen() {
     CashWiseTheme {
-        PinScreen("Let’s  setup your PIN")
+        PinInputView("Let’s  setup your PIN", 0) {}
     }
 }

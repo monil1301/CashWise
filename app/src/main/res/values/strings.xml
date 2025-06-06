@@ -17,4 +17,10 @@
     <string name="next">Next</string>
     <string name="get_started">Get Started</string>
 
+    <!-- Pin Screen -->
+    <string name="setup_pin">Set up your PIN</string>
+    <string name="confirm_pin">Confirm your PIN</string>
+    <string name="unlock_with_pin">Enter your PIN to unlock</string>
+
+
 </resources>
