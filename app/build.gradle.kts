@@ -77,6 +77,12 @@ dependencies {
     // Hilt navigation
     implementation(libs.hilt.nav.compose)
 
+    // DataStore
+    implementation(libs.datastore.preferences)
+
+    // Material icons
+    implementation(libs.material.icon)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
