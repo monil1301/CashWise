@@ -20,8 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.shah.cashwise.ui.screen.AppEntryScreen
 import com.shah.cashwise.ui.screen.AuthScreen
 import com.shah.cashwise.ui.screen.Onboarding
+import com.shah.cashwise.ui.screen.PinSetupScreen
+import com.shah.cashwise.ui.screen.PinUnlockScreen
 import com.shah.cashwise.ui.theme.CashWiseTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,22 +38,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            var disableOnboarding by remember { mutableStateOf(false) }
             CashWiseTheme {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    if (disableOnboarding)
-                        AuthScreen()
-
-                    AnimatedVisibility(
-                        visible = !disableOnboarding,
-                        exit = slideOutVertically(
-                            targetOffsetY = { it },
-                            animationSpec = tween(durationMillis = 500)
-                        ) + fadeOut(animationSpec = tween(500))
-                    ) {
-                        Onboarding { disableOnboarding = true }
-                    }
-                }
+                AppEntryScreen()
             }
         }
     }

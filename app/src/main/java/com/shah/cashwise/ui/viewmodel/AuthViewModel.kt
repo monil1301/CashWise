@@ -12,6 +12,7 @@ import com.shah.cashwise.data.model.auth.SignUpFormState
 import com.shah.cashwise.data.model.auth.User
 import com.shah.cashwise.data.model.auth.response.AuthUserResponse
 import com.shah.cashwise.data.repository.AuthRepository
+import com.shah.cashwise.data.source.local.preferences.UserPreferences
 import com.shah.cashwise.utils.ResponseResource
 import com.shah.cashwise.utils.extensions.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +27,7 @@ import javax.inject.Inject
  */
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(private val repository: AuthRepository) : ViewModel() {
+class AuthViewModel @Inject constructor(private val repository: AuthRepository, private val userPreferences: UserPreferences) : ViewModel() {
 
     var loginFormState by mutableStateOf(LoginFormState())
         private set
@@ -121,6 +122,10 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepository) 
                 _authState.value = repository.registerUserWithBackend(
                     User(user.email, it, user.name)
                 )
+
+                if (_authState.value is ResponseResource.Success) {
+                    userPreferences.setUserData((_authState.value as ResponseResource.Success<AuthUserResponse>).data)
+                }
             } ?: {
                 _authState.value = ResponseResource.Failure()
             }
@@ -142,6 +147,10 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepository) 
                 _authState.value = repository.loginUserWithBackend(
                     User(user.email, it, user.name)
                 )
+
+                if (_authState.value is ResponseResource.Success) {
+                    userPreferences.setUserData((_authState.value as ResponseResource.Success<AuthUserResponse>).data)
+                }
             } ?: {
                 _authState.value = ResponseResource.Failure()
             }

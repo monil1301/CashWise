@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
  */
 
 @Composable
-fun AuthScreen(viewModel: AuthViewModel = hiltViewModel()) {
+fun AuthScreen(viewModel: AuthViewModel = hiltViewModel(), onSuccessAuth: () -> Unit) {
     val state = viewModel.authState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -45,6 +45,9 @@ fun AuthScreen(viewModel: AuthViewModel = hiltViewModel()) {
             }
         }
     }
+
+    if (state.value is ResponseResource.Success)
+        onSuccessAuth()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -90,6 +93,6 @@ fun AuthScreen(viewModel: AuthViewModel = hiltViewModel()) {
 @Composable
 fun PreviewAuthScreen() {
     CashWiseTheme(darkTheme = false) {
-        AuthScreen()
+        AuthScreen {}
     }
 }
