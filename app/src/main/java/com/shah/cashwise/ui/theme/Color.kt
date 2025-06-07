@@ -55,3 +55,33 @@ val GrayBoulder = Color(0xFF8A8A8A)
 // Brown
 val BrownWoody = Color(0xFF795548)
 val BrownCedar = Color(0xFF5D4037)
+
+// For initials bg
+val letterColorMap = mapOf(
+    'A' to Color(0xFFEF5350), // Red
+    'B' to Color(0xFFAB47BC), // Purple
+    'C' to Color(0xFF5C6BC0), // Indigo
+    'D' to Color(0xFF29B6F6), // Light Blue
+    'E' to Color(0xFF26A69A), // Teal
+    'F' to Color(0xFF66BB6A), // Green
+    'G' to Color(0xFF9CCC65),
+    'H' to Color(0xFFFFCA28),
+    'I' to Color(0xFFFFA726),
+    'J' to Color(0xFF8D6E63),
+    'K' to Color(0xFF78909C),
+    'L' to Color(0xFFBA68C8),
+    'M' to Color(0xFF43A047), // Green
+    'N' to Color(0xFFEC407A),
+    'O' to Color(0xFF7E57C2),
+    'P' to Color(0xFF26C6DA),
+    'Q' to Color(0xFFFF7043),
+    'R' to Color(0xFFF06292), // Pink
+    'S' to Color(0xFF26A69A),
+    'T' to Color(0xFFFFA000),
+    'U' to Color(0xFF66BB6A),
+    'V' to Color(0xFF42A5F5),
+    'W' to Color(0xFF8E24AA),
+    'X' to Color(0xFFD4E157),
+    'Y' to Color(0xFF5C6BC0),
+    'Z' to Color(0xFFEF5350),
+)

@@ -36,7 +36,7 @@ fun AppEntryScreen(viewModel: AppEntryViewModel = hiltViewModel()) {
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (currentScreen == EntryScreens.MAIN_NAV)
-            Home()
+            MainNavScreen()
 
         AnimatedVisibility(
             visible = currentScreen == EntryScreens.PIN_SETUP,
