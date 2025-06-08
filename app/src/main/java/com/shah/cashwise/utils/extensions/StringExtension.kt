@@ -23,3 +23,7 @@ fun String.getInitials(): String {
         else -> "?"
     }.uppercase()
 }
+
+fun String.isValidDoubleNumber(): Boolean {
+    return toDoubleOrNull() != null
+}

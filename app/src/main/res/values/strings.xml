@@ -22,5 +22,12 @@
     <string name="confirm_pin">Confirm your PIN</string>
     <string name="unlock_with_pin">Enter your PIN to unlock</string>
 
+    <!-- Setup Screen -->
+    <string name="setup_start_button">Let\'s go</string>
+    <string name="setup_start_header">Let\'s setup your account!</string>
+    <string name="setup_start_description">Account can be your bank, credit card or your wallet.</string>
+
+    <!-- Add account -->
+    <string name="continue_">Continue</string>
 
 </resources>
