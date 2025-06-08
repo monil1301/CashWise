@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.google.firebase)
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.kapt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -82,6 +83,11 @@ dependencies {
 
     // Material icons
     implementation(libs.material.icon)
+
+    // Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
