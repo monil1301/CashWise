@@ -1,4 +1,4 @@
-package com.shah.cashwise.theme
+package com.shah.cashwise.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
