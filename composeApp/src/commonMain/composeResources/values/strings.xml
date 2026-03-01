@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">CashWise</string>
+
+    <!-- Common -->
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+    <!-- End -->
+
+    <!-- Onboarding -->
+    <string name="onboarding_get_started">Get Started</string>
+    <string name="onboarding_title_1">Track expenses, clearly.</string>
+    <string name="onboarding_description_1">Log expenses in seconds and see where your money goes.</string>
+    <string name="onboarding_title_2">Budgets &amp; sinking funds</string>
+    <string name="onboarding_description_2">Set budgets, save for goals, and stay on track month to month.</string>
+    <string name="onboarding_title_3">Shared wallets</string>
+    <string name="onboarding_description_3">Share a wallet with family/partners and stay transparent.</string>
+    <!-- End -->
 </resources>
