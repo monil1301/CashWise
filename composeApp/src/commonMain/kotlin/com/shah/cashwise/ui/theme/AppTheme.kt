@@ -1,11 +1,23 @@
 package com.shah.cashwise.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
-// Cashwise palette (Premium Emerald)
+object CashWiseThemeTokens {
+    val supportColors: CashWiseSupportColors
+        @Composable get() = LocalCashWiseSupportColors.current
+}
+
+/** Window width at or above which the wide two-pane layout and [TypeScale.Expanded] apply. */
+private val ExpandedWidthThreshold = 840.dp
 
 @Composable
 fun CashWiseTheme(
@@ -13,135 +25,162 @@ fun CashWiseTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = if (useDarkTheme) CashwiseDark else CashwiseLight
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = cashwiseTypography(),
-        content = content
-    )
+    val supportColors = if (useDarkTheme) {
+        CashWiseSupportColors(
+            warning = AmberDark,
+            onWarning = SurfaceDark,
+        )
+    } else {
+        CashWiseSupportColors(
+            warning = Amber,
+            onWarning = OnSurfaceCharcoal,
+        )
+    }
+
+    // The type scale is chosen from the current window width — the same signal
+    // that drives the layout — so it follows the layout rather than the device:
+    // a tablet in portrait shows the stacked layout and gets the Compact scale,
+    // and it recomputes automatically on rotation, resize or multi-window.
+    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+        val typeScale = if (maxWidth >= ExpandedWidthThreshold) {
+            TypeScale.Expanded
+        } else {
+            TypeScale.Compact
+        }
+
+        CompositionLocalProvider(LocalCashWiseSupportColors provides supportColors) {
+            MaterialTheme(
+                colorScheme = colorScheme,
+                typography = cashWiseTypography(typeScale),
+                shapes = CashWiseShapes,
+                content = content
+            )
+        }
+    }
 }
 
 private val CashwiseLight = ColorScheme(
-    primary = GreenEmeraldDeep,
+    primary = DeepTeal,
     onPrimary = White,
-    primaryContainer = MintSpring,
-    onPrimaryContainer = PineBlack,
-    inversePrimary = EmeraldLight,
+    primaryContainer = LightTeal,
+    onPrimaryContainer = OnSurfaceCharcoal,
+    inversePrimary = DeepTealDark,
 
-    secondary = TealDeep,
+    secondary = Indigo,
     onSecondary = White,
-    secondaryContainer = AquaMist,
-    onSecondaryContainer = TealBlack,
+    secondaryContainer = LightIndigo,
+    onSecondaryContainer = OnSurfaceCharcoal,
 
-    tertiary = AmberBrown,
-    onTertiary = White,
-    tertiaryContainer = Sand,
-    onTertiaryContainer = BrownDeep,
+    tertiary = Amber,
+    onTertiary = OnSurfaceCharcoal,
+    tertiaryContainer = Color(0xFFFFF3C4),
+    onTertiaryContainer = OnSurfaceCharcoal,
 
-    background = Alabaster,
-    onBackground = Charcoal,
+    background = SurfaceOffWhite,
+    onBackground = OnSurfaceCharcoal,
 
-    surface = White,
-    onSurface = Charcoal,
-    surfaceVariant = GrayHawkes,
-    onSurfaceVariant = GrayOuterSpace,
-    surfaceTint = GreenEmeraldDeep,
+    surface = SurfaceWhite,
+    onSurface = OnSurfaceCharcoal,
+    surfaceVariant = SurfaceOffWhite,
+    onSurfaceVariant = OnSurfaceSlate,
+    surfaceTint = DeepTeal,
 
-    inverseSurface = RaisinBlack,
-    inverseOnSurface = GrayPorcelain,
+    inverseSurface = OnSurfaceCharcoal,
+    inverseOnSurface = SurfaceOffWhite,
 
-    error = RedCopper,
+    error = SoftRed,
     onError = White,
-    errorContainer = RoseWhite,
-    onErrorContainer = Oxblood,
+    errorContainer = Color(0xFFFEE2E2),
+    onErrorContainer = OnSurfaceCharcoal,
 
-    outline = GrayBattleship,
-    outlineVariant = GrayGainsboro,
+    outline = OutlineLight,
+    outlineVariant = OutlineLight,
 
     scrim = Black,
 
-    surfaceBright = White,
-    surfaceDim = GrayMercury,
-    surfaceContainer = GrayPampas,
-    surfaceContainerHigh = GrayPorcelain,
-    surfaceContainerHighest = GrayAlto,
-    surfaceContainerLow = GrayBianco,
-    surfaceContainerLowest = White,
+    surfaceBright = SurfaceWhite,
+    surfaceDim = Color(0xFFF1F5F9),
+    surfaceContainer = Color(0xFFF8FAFC),
+    surfaceContainerHigh = Color(0xFFF1F5F9),
+    surfaceContainerHighest = Color(0xFFEFF4F8),
+    surfaceContainerLow = SurfaceWhite,
+    surfaceContainerLowest = SurfaceWhite,
 
-    primaryFixed = MintSpring,
-    primaryFixedDim = EmeraldLight,
-    onPrimaryFixed = PineBlack,
-    onPrimaryFixedVariant = GreenHunter,
+    primaryFixed = LightTeal,
+    primaryFixedDim = DeepTeal,
+    onPrimaryFixed = OnSurfaceCharcoal,
+    onPrimaryFixedVariant = DeepTeal,
 
-    secondaryFixed = AquaMist,
-    secondaryFixedDim = Turquoise,
-    onSecondaryFixed = TealBlack,
-    onSecondaryFixedVariant = TealPine,
+    secondaryFixed = LightIndigo,
+    secondaryFixedDim = Indigo,
+    onSecondaryFixed = OnSurfaceCharcoal,
+    onSecondaryFixedVariant = Indigo,
 
-    tertiaryFixed = Sand,
-    tertiaryFixedDim = Maize,
-    onTertiaryFixed = BrownDeep,
-    onTertiaryFixedVariant = Bronze,
+    tertiaryFixed = Color(0xFFFFF3C4),
+    tertiaryFixedDim = Amber,
+    onTertiaryFixed = OnSurfaceCharcoal,
+    onTertiaryFixedVariant = Amber,
 )
 
 private val CashwiseDark = ColorScheme(
-    primary = EmeraldLight,
-    onPrimary = GreenBottle,
-    primaryContainer = GreenHunter,
-    onPrimaryContainer = MintSpring,
-    inversePrimary = GreenEmeraldDeep,
+    primary = DeepTealDark,
+    onPrimary = SurfaceDark,
+    primaryContainer = DeepTealContainerDark,
+    onPrimaryContainer = LightTeal,
+    inversePrimary = DeepTeal,
 
-    secondary = Turquoise,
-    onSecondary = TealBottle,
-    secondaryContainer = TealPine,
-    onSecondaryContainer = AquaMist,
+    secondary = IndigoDark,
+    onSecondary = SurfaceDark,
+    secondaryContainer = IndigoContainerDark,
+    onSecondaryContainer = LightIndigo,
 
-    tertiary = Maize,
-    onTertiary = BrownSepia,
-    tertiaryContainer = Bronze,
-    onTertiaryContainer = Sand,
+    tertiary = AmberDark,
+    onTertiary = SurfaceDark,
+    tertiaryContainer = Color(0xFF78350F),
+    onTertiaryContainer = Color(0xFFFDE68A),
 
-    background = BlackPearl,
-    onBackground = GrayAthens,
+    background = SurfaceDark,
+    onBackground = OnSurfaceDark,
 
-    surface = BlackPearl,
-    onSurface = GrayAthens,
-    surfaceVariant = GrayOuterSpace,
-    onSurfaceVariant = GrayGainsboro,
-    surfaceTint = EmeraldLight,
+    surface = SurfaceDark,
+    onSurface = OnSurfaceDark,
+    surfaceVariant = SurfaceVariantDark,
+    onSurfaceVariant = OnSurfaceVariantDark,
+    surfaceTint = DeepTealDark,
 
-    inverseSurface = GrayAthens,
-    inverseOnSurface = RaisinBlack,
+    inverseSurface = OnSurfaceDark,
+    inverseOnSurface = SurfaceDark,
 
-    error = PinkLight,
-    onError = Maroon,
-    errorContainer = RedBrick,
-    onErrorContainer = RoseWhite,
+    error = SoftRedDark,
+    onError = SurfaceDark,
+    errorContainer = SoftRedContainerDark,
+    onErrorContainer = Color(0xFFFEE2E2),
 
-    outline = GraySilver,
-    outlineVariant = GrayOuterSpace,
+    outline = OutlineDark,
+    outlineVariant = OutlineDark,
 
     scrim = Black,
 
-    surfaceBright = BlackOlive,
-    surfaceDim = BlackNero,
-    surfaceContainer = BlackJungle,
-    surfaceContainerHigh = BlackOlive,
-    surfaceContainerHighest = Gunmetal,
-    surfaceContainerLow = BlackCharcoal,
-    surfaceContainerLowest = BlackOnyx,
+    surfaceBright = Color(0xFF1E293B),
+    surfaceDim = Color(0xFF0B1220),
+    surfaceContainer = Color(0xFF111C31),
+    surfaceContainerHigh = Color(0xFF17243A),
+    surfaceContainerHighest = SurfaceVariantDark,
+    surfaceContainerLow = Color(0xFF0F1A2E),
+    surfaceContainerLowest = Color(0xFF091120),
 
-    primaryFixed = MintSpring,
-    primaryFixedDim = EmeraldLight,
-    onPrimaryFixed = PineBlack,
-    onPrimaryFixedVariant = GreenHunter,
+    primaryFixed = LightTeal,
+    primaryFixedDim = DeepTealDark,
+    onPrimaryFixed = SurfaceDark,
+    onPrimaryFixedVariant = DeepTealContainerDark,
 
-    secondaryFixed = AquaMist,
-    secondaryFixedDim = Turquoise,
-    onSecondaryFixed = TealBlack,
-    onSecondaryFixedVariant = TealPine,
+    secondaryFixed = LightIndigo,
+    secondaryFixedDim = IndigoDark,
+    onSecondaryFixed = SurfaceDark,
+    onSecondaryFixedVariant = IndigoContainerDark,
 
-    tertiaryFixed = Sand,
-    tertiaryFixedDim = Maize,
-    onTertiaryFixed = BrownDeep,
-    onTertiaryFixedVariant = Bronze,
+    tertiaryFixed = Color(0xFFFDE68A),
+    tertiaryFixedDim = AmberDark,
+    onTertiaryFixed = SurfaceDark,
+    onTertiaryFixedVariant = Color(0xFF78350F),
 )

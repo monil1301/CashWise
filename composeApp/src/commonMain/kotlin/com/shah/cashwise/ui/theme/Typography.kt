@@ -6,122 +6,64 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-fun cashwiseTypography(
-    fontFamily: FontFamily = FontFamily.Default
-): Typography = Typography(
+/**
+ * Width-driven typography tiers.
+ *
+ * [Compact] backs the stacked phone / tablet-portrait layouts; [Expanded] backs
+ * the wide two-pane layout. The tier is chosen once in `CashWiseTheme` from the
+ * current window width — the same signal that drives the layout — so it tracks
+ * the layout, not the physical device (a tablet in portrait uses [Compact]).
+ */
+enum class TypeScale { Compact, Expanded }
 
-    // Display (hero totals)
-    displayLarge = TextStyle(
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 57.sp,
-        lineHeight = 64.sp,
-        letterSpacing = 0.sp
-    ),
-    displayMedium = TextStyle(
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 45.sp,
-        lineHeight = 52.sp,
-        letterSpacing = 0.sp
-    ),
-    displaySmall = TextStyle(
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 36.sp,
-        lineHeight = 44.sp,
-        letterSpacing = 0.sp
-    ),
+/**
+ * Builds the CashWise type scale for the given [scale].
+ *
+ * [Compact] values are unchanged from the mobile spec. Each style keeps its
+ * line-height ratio across tiers, so [Expanded] sizes are proportionally leaded.
+ */
+fun cashWiseTypography(
+    scale: TypeScale,
+    fontFamily: FontFamily = FontFamily.Default,
+): Typography {
+    fun style(
+        weight: FontWeight,
+        compactSize: Int,
+        compactLineHeight: Int,
+        expandedSize: Int,
+    ): TextStyle {
+        val size = if (scale == TypeScale.Expanded) expandedSize else compactSize
+        val lineHeightRatio = compactLineHeight.toFloat() / compactSize
+        return TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = weight,
+            fontSize = size.sp,
+            lineHeight = (size * lineHeightRatio).sp,
+            letterSpacing = 0.sp,
+        )
+    }
 
-    // Headlines (screen titles / key numerals)
-    headlineLarge = TextStyle(
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 32.sp,
-        lineHeight = 40.sp,
-        letterSpacing = 0.sp
-    ),
-    headlineMedium = TextStyle(
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 28.sp,
-        lineHeight = 36.sp,
-        letterSpacing = 0.sp
-    ),
-    headlineSmall = TextStyle(
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 24.sp,
-        lineHeight = 32.sp,
-        letterSpacing = 0.sp
-    ),
-
-    // Titles (section headers)
-    titleLarge = TextStyle(
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    titleMedium = TextStyle(
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.sp
-    ),
-    titleSmall = TextStyle(
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 14.sp,
-        lineHeight = 20.sp,
-        letterSpacing = 0.sp
-    ),
-
-    // Body
-    bodyLarge = TextStyle(
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.sp
-    ),
-    bodyMedium = TextStyle(
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        lineHeight = 20.sp,
-        letterSpacing = 0.sp
-    ),
-    bodySmall = TextStyle(
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.sp
-    ),
-
-    // Labels (buttons/chips)
-    labelLarge = TextStyle(
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 14.sp,
-        lineHeight = 20.sp,
-        letterSpacing = 0.1.sp
-    ),
-    labelMedium = TextStyle(
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 12.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.2.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = fontFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.3.sp
-    ),
-)
+    return Typography(
+        // Display — onboarding headlines, hero numbers
+        displayLarge = style(FontWeight.Bold, compactSize = 32, compactLineHeight = 40, expandedSize = 44),
+        displayMedium = style(FontWeight.Bold, compactSize = 28, compactLineHeight = 36, expandedSize = 38),
+        displaySmall = style(FontWeight.Bold, compactSize = 24, compactLineHeight = 32, expandedSize = 32),
+        // Headline
+        headlineLarge = style(FontWeight.SemiBold, compactSize = 24, compactLineHeight = 32, expandedSize = 30),
+        headlineMedium = style(FontWeight.SemiBold, compactSize = 22, compactLineHeight = 30, expandedSize = 28),
+        headlineSmall = style(FontWeight.SemiBold, compactSize = 20, compactLineHeight = 28, expandedSize = 26),
+        // Title — screen titles, card headers
+        titleLarge = style(FontWeight.SemiBold, compactSize = 20, compactLineHeight = 28, expandedSize = 24),
+        titleMedium = style(FontWeight.SemiBold, compactSize = 16, compactLineHeight = 22, expandedSize = 20),
+        titleSmall = style(FontWeight.SemiBold, compactSize = 14, compactLineHeight = 18, expandedSize = 18),
+        // Body — descriptions, list rows
+        bodyLarge = style(FontWeight.Normal, compactSize = 16, compactLineHeight = 22, expandedSize = 18),
+        bodyMedium = style(FontWeight.Normal, compactSize = 14, compactLineHeight = 20, expandedSize = 16),
+        // Caption — timestamps, helper text
+        bodySmall = style(FontWeight.Normal, compactSize = 11, compactLineHeight = 16, expandedSize = 12),
+        // Label — buttons, chips, tabs
+        labelLarge = style(FontWeight.Medium, compactSize = 12, compactLineHeight = 16, expandedSize = 14),
+        labelMedium = style(FontWeight.Medium, compactSize = 12, compactLineHeight = 16, expandedSize = 14),
+        labelSmall = style(FontWeight.Medium, compactSize = 11, compactLineHeight = 14, expandedSize = 12),
+    )
+}
