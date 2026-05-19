@@ -15,4 +15,17 @@
     <string name="onboarding_title_3">Shared wallets</string>
     <string name="onboarding_description_3">Share a wallet with family/partners and stay transparent.</string>
     <!-- End -->
+
+    <!-- Welcome -->
+    <string name="welcome_title">Start using CashWise</string>
+    <string name="welcome_description">Track daily spending, set budgets, and save for goals — all on your device.</string>
+    <string name="welcome_continue_offline">Continue Offline</string>
+    <string name="welcome_sign_in">Sign in to Sync</string>
+    <string name="welcome_sign_in_hint">You can sign in anytime from Settings.</string>
+    <string name="welcome_illustration_placeholder">Welcome illustration</string>
+    <string name="welcome_feature_local_data_title">Local Data</string>
+    <string name="welcome_feature_local_data_description">Your privacy is built-in by design.</string>
+    <string name="welcome_feature_offline_first_title">Offline First</string>
+    <string name="welcome_feature_offline_first_description">No internet connection required.</string>
+    <!-- End -->
 </resources>

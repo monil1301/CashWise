@@ -31,6 +31,7 @@ import cashwise.composeapp.generated.resources.onboarding_page_3
 import com.shah.cashwise.di.appModules
 import com.shah.cashwise.ui.screens.onboarding.OnboardingPage
 import com.shah.cashwise.ui.screens.onboarding.OnboardingScreen
+import com.shah.cashwise.ui.screens.welcome.WelcomeScreen
 import com.shah.cashwise.ui.theme.CashWiseTheme
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
@@ -41,6 +42,7 @@ fun App() {
     KoinApplication(application = { modules(appModules) }) {
         CashWiseTheme {
             var showOnboarding by rememberSaveable { mutableStateOf(true) }
+            var showWelcome by rememberSaveable { mutableStateOf(true) }
             val pages = remember {
                 listOf(
                     OnboardingPage(
@@ -61,28 +63,40 @@ fun App() {
                 )
             }
 
-            if (showOnboarding) {
-                OnboardingScreen(
-                    pages = pages,
-                    onFinished = { showOnboarding = false },
-                    skipLabel = stringResource(Res.string.skip),
-                    nextLabel = stringResource(Res.string.next),
-                    finishLabel = stringResource(Res.string.onboarding_get_started),
-                    modifier = Modifier
-                        .safeContentPadding()
-                        .fillMaxSize(),
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .safeContentPadding()
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = stringResource(Res.string.app_name),
-                        style = MaterialTheme.typography.headlineSmall,
+            when {
+                showOnboarding -> {
+                    OnboardingScreen(
+                        pages = pages,
+                        onFinished = { showOnboarding = false },
+                        skipLabel = stringResource(Res.string.skip),
+                        nextLabel = stringResource(Res.string.next),
+                        finishLabel = stringResource(Res.string.onboarding_get_started),
+                        modifier = Modifier
+                            .safeContentPadding()
+                            .fillMaxSize(),
                     )
+                }
+
+                showWelcome -> {
+                    WelcomeScreen(
+                        onContinueOffline = { showWelcome = false },
+                        onSignIn = { showWelcome = false },
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
+
+                else -> {
+                    Box(
+                        modifier = Modifier
+                            .safeContentPadding()
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text = stringResource(Res.string.app_name),
+                            style = MaterialTheme.typography.headlineSmall,
+                        )
+                    }
                 }
             }
         }

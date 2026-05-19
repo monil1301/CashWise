@@ -1,23 +1,16 @@
 package com.shah.cashwise.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 
 object CashWiseThemeTokens {
     val supportColors: CashWiseSupportColors
         @Composable get() = LocalCashWiseSupportColors.current
 }
-
-/** Window width at or above which the wide two-pane layout and [TypeScale.Expanded] apply. */
-private val ExpandedWidthThreshold = 840.dp
 
 @Composable
 fun CashWiseTheme(
@@ -37,25 +30,13 @@ fun CashWiseTheme(
         )
     }
 
-    // The type scale is chosen from the current window width — the same signal
-    // that drives the layout — so it follows the layout rather than the device:
-    // a tablet in portrait shows the stacked layout and gets the Compact scale,
-    // and it recomputes automatically on rotation, resize or multi-window.
-    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-        val typeScale = if (maxWidth >= ExpandedWidthThreshold) {
-            TypeScale.Expanded
-        } else {
-            TypeScale.Compact
-        }
-
-        CompositionLocalProvider(LocalCashWiseSupportColors provides supportColors) {
-            MaterialTheme(
-                colorScheme = colorScheme,
-                typography = cashWiseTypography(typeScale),
-                shapes = CashWiseShapes,
-                content = content
-            )
-        }
+    CompositionLocalProvider(LocalCashWiseSupportColors provides supportColors) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = cashWiseTypography(),
+            shapes = CashWiseShapes,
+            content = content
+        )
     }
 }
 
