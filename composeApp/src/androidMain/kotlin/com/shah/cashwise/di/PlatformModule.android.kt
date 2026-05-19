@@ -1,0 +1,18 @@
+package com.shah.cashwise.di
+
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import com.shah.cashwise.CashWiseApplication
+import com.shah.cashwise.data.local.DATA_STORE_FILE_NAME
+import com.shah.cashwise.data.local.createDataStore
+import org.koin.core.module.Module
+import org.koin.dsl.module
+import java.io.File
+
+actual val platformModule: Module = module {
+    single<DataStore<Preferences>> {
+        createDataStore {
+            File(CashWiseApplication.appContext.filesDir, DATA_STORE_FILE_NAME).absolutePath
+        }
+    }
+}
