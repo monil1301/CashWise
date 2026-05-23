@@ -4,6 +4,9 @@
     <!-- Common -->
     <string name="skip">Skip</string>
     <string name="next">Next</string>
+    <string name="continue_action">Continue</string>
+    <string name="back">Back</string>
+    <string name="cancel">Cancel</string>
     <!-- End -->
 
     <!-- Onboarding -->
@@ -27,5 +30,103 @@
     <string name="welcome_feature_local_data_description">Your privacy is built-in by design.</string>
     <string name="welcome_feature_offline_first_title">Offline First</string>
     <string name="welcome_feature_offline_first_description">No internet connection required.</string>
+    <!-- End -->
+
+    <!-- Setup -->
+    <string name="setup_step_label">Step %1$d of %2$d</string>
+    <string name="setup_create_wallet_title">Create your first wallet</string>
+    <string name="setup_create_wallet_description">A wallet holds your accounts, transactions, and budgets.</string>
+    <string name="setup_wallet_name_label">Wallet name</string>
+    <string name="setup_wallet_name_placeholder">e.g. Personal</string>
+    <string name="setup_wallet_type_label">Wallet type</string>
+    <string name="setup_wallet_type_solo">Solo</string>
+    <string name="setup_wallet_type_shared">Shared</string>
+    <string name="setup_wallet_type_solo_hint">Just for you. You can invite others later.</string>
+    <string name="setup_wallet_type_shared_hint">Share with family or partners — invite them anytime.</string>
+    <string name="setup_currency_label">Currency</string>
+    <string name="setup_add_accounts_title">Add your accounts</string>
+    <string name="setup_add_accounts_description">Accounts are where your money lives. Turn on the ones you use.</string>
+    <string name="setup_account_cash">Cash</string>
+    <string name="setup_account_upi">UPI</string>
+    <string name="setup_account_bank">Bank</string>
+    <string name="setup_account_card">Card</string>
+    <string name="setup_account_custom">Custom account</string>
+    <string name="setup_account_balance_placeholder">Starting balance (optional)</string>
+    <string name="setup_add_custom_account">Add custom account</string>
+    <string name="setup_custom_account_close">Close</string>
+    <string name="setup_custom_account_name_label">Account name</string>
+    <string name="setup_custom_account_name_placeholder">e.g. Wallet, Paytm, Savings</string>
+    <string name="setup_custom_account_icon_label">Choose an icon</string>
+    <string name="setup_custom_account_balance_label">Starting balance (optional)</string>
+    <string name="setup_custom_account_balance_placeholder">0</string>
+    <string name="setup_custom_account_submit">Add account</string>
+    <string name="setup_lock_title">Lock Cashwise</string>
+    <string name="setup_lock_description">Protect your money data with a PIN and Face ID, Touch ID, or Fingerprint.</string>
+    <string name="setup_lock_enable_label">Enable App Lock</string>
+    <string name="setup_lock_recommended">Recommended</string>
+    <string name="setup_lock_pin_hint">Your PIN never leaves this device.</string>
+    <string name="setup_lock_set_pin">Set PIN</string>
+    <string name="setup_lock_not_now">Not now</string>
+    <string name="set_pin_create_title">Create PIN</string>
+    <string name="set_pin_confirm_title">Confirm PIN</string>
+    <string name="set_pin_create_heading">Create a 6-digit PIN</string>
+    <string name="set_pin_create_description">You\'ll use this to unlock Cashwise.</string>
+    <string name="set_pin_confirm_heading">Re-enter your PIN</string>
+    <string name="set_pin_confirm_description">Enter the same 6-digit PIN again to confirm.</string>
+    <string name="set_pin_mismatch">Those don\'t match. Try again.</string>
+    <string name="set_pin_start_over">Start over</string>
+    <string name="set_pin_backspace">Delete</string>
+    <string name="set_pin_brand_tagline">Your security is our priority</string>
+    <string name="set_pin_brand_description">All your financial data is encrypted and protected with industry-standard protocols.</string>
+    <string name="setup_budget_title">Set your first budget</string>
+    <string name="setup_budget_description">Pick a category and a monthly limit. You can change or add more later.</string>
+    <string name="setup_budget_category_label">Category</string>
+    <string name="setup_budget_category_food">Food &amp; Dining</string>
+    <string name="setup_budget_category_groceries">Groceries</string>
+    <string name="setup_budget_category_transport">Transport</string>
+    <string name="setup_budget_category_shopping">Shopping</string>
+    <string name="setup_budget_category_bills">Bills</string>
+    <string name="setup_budget_limit_label">Monthly limit</string>
+    <string name="setup_budget_limit_placeholder">0</string>
+    <string name="setup_budget_alert_caption">Cashwise alerts you at 50%, 80%, and 100%.</string>
+    <string name="setup_budget_set">Set budget</string>
+    <string name="setup_budget_skip">Skip for now</string>
+    <string name="setup_invite_title">Invite members</string>
+    <string name="setup_invite_description">Add people to your shared wallet. You control each person\'s role.</string>
+    <string name="setup_invite_members_label">Members</string>
+    <string name="setup_invite_member_you">You</string>
+    <string name="setup_invite_role_owner">Owner</string>
+    <string name="setup_invite_via_link">Invite via link</string>
+    <string name="setup_invite_show_qr">Show QR code</string>
+    <string name="setup_invite_done">Done</string>
+    <string name="setup_invite_skip_caption">You can invite members anytime from wallet settings.</string>
+    <string name="invite_member_title">Invite a member</string>
+    <string name="invite_member_close">Close</string>
+    <string name="invite_role_label">Role</string>
+    <string name="invite_role_admin">Admin</string>
+    <string name="invite_role_member">Member</string>
+    <string name="invite_role_viewer">Viewer</string>
+    <string name="invite_role_admin_hint">Admins can manage members and edit any transaction.</string>
+    <string name="invite_role_member_hint">Members can add and edit their own transactions.</string>
+    <string name="invite_role_viewer_hint">Viewers can see transactions but not change them.</string>
+    <string name="invite_qr_caption">Scan to join this wallet</string>
+    <string name="invite_code_label">Invite code</string>
+    <string name="invite_link_label">Invite link</string>
+    <string name="invite_link_copy">Copy</string>
+    <string name="invite_share">Share invite</string>
+    <string name="invite_expires">Link expires in %1$d days</string>
+    <string name="invite_reset">Reset link</string>
+    <string name="setup_illustration_placeholder">Step illustration</string>
+    <string name="setup_step_placeholder_title">More setup coming soon</string>
+    <string name="setup_step_placeholder_description">This step isn\'t built yet.</string>
+    <!-- End -->
+
+    <!-- Currencies -->
+    <string name="currency_name_inr">Indian Rupee</string>
+    <string name="currency_name_usd">US Dollar</string>
+    <string name="currency_name_eur">Euro</string>
+    <string name="currency_name_gbp">British Pound</string>
+    <string name="currency_name_jpy">Japanese Yen</string>
+    <string name="currency_name_aud">Australian Dollar</string>
     <!-- End -->
 </resources>

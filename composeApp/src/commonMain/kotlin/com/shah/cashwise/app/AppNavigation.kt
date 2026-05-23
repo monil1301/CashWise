@@ -29,13 +29,15 @@ import cashwise.composeapp.generated.resources.onboarding_title_3
 import cashwise.composeapp.generated.resources.skip
 import com.shah.cashwise.ui.screens.onboarding.OnboardingPage
 import com.shah.cashwise.ui.screens.onboarding.OnboardingScreen
+import com.shah.cashwise.ui.screens.setup.SetupScreen
 import com.shah.cashwise.ui.screens.welcome.WelcomeScreen
 import org.jetbrains.compose.resources.stringResource
 
 /**
  * Top-level destination switch. Onboarding shows on first launch only — once
  * [AppState.onboardingCompleted] is persisted, later launches go straight to
- * the welcome screen (the offline-first, not-signed-in entry point).
+ * the welcome screen (the offline-first, not-signed-in entry point), then into
+ * the setup flow.
  */
 @Composable
 internal fun AppNavigation(
@@ -44,6 +46,7 @@ internal fun AppNavigation(
 ) {
     val pages = remember { onboardingPages() }
     var showWelcome by rememberSaveable { mutableStateOf(true) }
+    var setupCompleted by rememberSaveable { mutableStateOf(false) }
 
     when {
         // Preferences still loading — render nothing rather than flash onboarding.
@@ -67,6 +70,16 @@ internal fun AppNavigation(
                 onContinueOffline = { showWelcome = false },
                 onSignIn = { showWelcome = false },
                 modifier = Modifier.fillMaxSize(),
+            )
+        }
+
+        !setupCompleted -> {
+            SetupScreen(
+                onExit = { showWelcome = true },
+                onFinished = { setupCompleted = true },
+                modifier = Modifier
+                    .safeContentPadding()
+                    .fillMaxSize(),
             )
         }
 

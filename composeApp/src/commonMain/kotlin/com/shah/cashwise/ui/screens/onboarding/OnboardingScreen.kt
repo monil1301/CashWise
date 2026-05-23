@@ -17,8 +17,6 @@ import cashwise.composeapp.generated.resources.onboarding_page_2
 import cashwise.composeapp.generated.resources.onboarding_page_3
 import com.shah.cashwise.di.appModules
 import com.shah.cashwise.ui.theme.CashWiseTheme
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
 import org.koin.compose.viewmodel.koinViewModel
@@ -28,12 +26,6 @@ private enum class OnboardingLayoutType {
     Medium,
     Expanded,
 }
-
-data class OnboardingPage(
-    val image: DrawableResource,
-    val title: StringResource,
-    val description: StringResource,
-)
 
 @Composable
 fun OnboardingScreen(
