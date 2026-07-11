@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +31,7 @@ import cashwise.composeapp.generated.resources.skip
 import com.shah.cashwise.ui.screens.onboarding.OnboardingPage
 import com.shah.cashwise.ui.screens.onboarding.OnboardingScreen
 import com.shah.cashwise.ui.screens.setup.SetupScreen
+import com.shah.cashwise.ui.screens.signin.SignInScreen
 import com.shah.cashwise.ui.screens.welcome.WelcomeScreen
 import org.jetbrains.compose.resources.stringResource
 
@@ -46,11 +48,30 @@ internal fun AppNavigation(
 ) {
     val pages = remember { onboardingPages() }
     var showWelcome by rememberSaveable { mutableStateOf(true) }
+    var showSignIn by rememberSaveable { mutableStateOf(false) }
     var setupCompleted by rememberSaveable { mutableStateOf(false) }
+
+    // React to auth-session changes. Signing in (from the sign-in screen, or a
+    // session restored on launch) dismisses the welcome/sign-in gate and drops
+    // into setup; signing out returns to the offline-first welcome screen. This
+    // only fires when isSignedIn actually flips, so offline users who tapped
+    // "Continue Offline" are never pulled back to welcome.
+    LaunchedEffect(state.isSignedIn) {
+        if (state.isSignedIn) {
+            showSignIn = false
+            showWelcome = false
+        } else {
+            showWelcome = true
+        }
+    }
 
     when {
         // Preferences still loading — render nothing rather than flash onboarding.
         state.isLoading -> Unit
+
+        // Onboarding done but session not yet restored — wait rather than flash
+        // welcome before we know whether a real session exists.
+        state.onboardingCompleted && state.isSessionResolving -> Unit
 
         !state.onboardingCompleted -> {
             OnboardingScreen(
@@ -65,10 +86,19 @@ internal fun AppNavigation(
             )
         }
 
+        showSignIn -> {
+            SignInScreen(
+                onBack = { showSignIn = false },
+                modifier = Modifier
+                    .safeContentPadding()
+                    .fillMaxSize(),
+            )
+        }
+
         showWelcome -> {
             WelcomeScreen(
                 onContinueOffline = { showWelcome = false },
-                onSignIn = { showWelcome = false },
+                onSignIn = { showSignIn = true },
                 modifier = Modifier.fillMaxSize(),
             )
         }

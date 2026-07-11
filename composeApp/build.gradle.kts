@@ -1,5 +1,6 @@
 import com.android.build.api.dsl.ApplicationExtension
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -9,6 +10,64 @@ plugins {
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.sqldelight)
     alias(libs.plugins.kotlinSerialization)
+}
+
+// --- Supabase credentials (generated, never committed) ---------------------
+// Resolved at configuration time from local.properties, then Gradle properties,
+// then env vars. Blank values are valid: the app stays fully offline and the
+// sign-in screen reports that sync is not configured (see OfflineAuthRepository).
+val localSecrets: Map<String, String> = run {
+    val text = providers.fileContents(
+        rootProject.layout.projectDirectory.file("local.properties"),
+    ).asText.orNull
+    if (text.isNullOrBlank()) emptyMap()
+    else Properties().apply { load(text.reader()) }
+        .entries.associate { (k, v) -> k.toString() to v.toString() }
+}
+
+fun secretOrEmpty(key: String): String =
+    localSecrets[key]
+        ?: providers.gradleProperty(key).orNull
+        ?: providers.environmentVariable(key).orNull
+        ?: ""
+
+val supabaseUrl: String = secretOrEmpty("SUPABASE_URL")
+val supabaseAnonKey: String = secretOrEmpty("SUPABASE_ANON_KEY")
+val generatedSupabaseConfigDir: Provider<Directory> =
+    layout.buildDirectory.dir("generated/supabaseConfig/kotlin")
+
+val generateSupabaseConfig = tasks.register("generateSupabaseConfig") {
+    val outDir = generatedSupabaseConfigDir
+    val url = supabaseUrl
+    val key = supabaseAnonKey
+    inputs.property("url", url)
+    inputs.property("key", key)
+    outputs.dir(outDir)
+    doLast {
+        val pkgDir = outDir.get().asFile.resolve("com/shah/cashwise/core/config")
+        pkgDir.mkdirs()
+        pkgDir.resolve("SupabaseConfig.kt").writeText(
+            """
+            |package com.shah.cashwise.core.config
+            |
+            |/**
+            | * Supabase project credentials, generated at build time from
+            | * local.properties / Gradle properties / env vars. Do NOT edit by hand.
+            | * Blank values mean sync is not configured and the app stays offline-only.
+            | */
+            |internal object SupabaseConfig {
+            |    const val URL: String = "$url"
+            |    const val ANON_KEY: String = "$key"
+            |}
+            |
+            """.trimMargin(),
+        )
+    }
+}
+
+// Generate the config before any Kotlin compilation across all targets.
+tasks.matching { it.name.startsWith("compile") }.configureEach {
+    dependsOn(generateSupabaseConfig)
 }
 
 kotlin {
@@ -36,34 +95,40 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.ktor.client.android)
         }
-        commonMain.dependencies {
-            implementation(libs.compose.runtime)
-            implementation(libs.compose.foundation)
-            implementation(libs.compose.material3)
-            implementation(compose.materialIconsExtended)
-            implementation(libs.compose.ui)
-            implementation(libs.compose.components.resources)
-            implementation(libs.compose.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation(libs.sqldelight.runtime)
-            implementation(libs.androidx.datastore.preferences.core)
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(project.dependencies.platform(libs.koin.bom))
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
-            implementation(libs.kotlinx.serialization.json)
-            implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.serialization.kotlinx.json)
-            implementation(libs.ktor.client.logging)
-            implementation(libs.coil.compose)
-            implementation(libs.coil.network.ktor3)
-            implementation(libs.qrose)
+        commonMain {
+            kotlin.srcDir(generatedSupabaseConfigDir)
+            dependencies {
+                implementation(libs.compose.runtime)
+                implementation(libs.compose.foundation)
+                implementation(libs.compose.material3)
+                implementation(compose.materialIconsExtended)
+                implementation(libs.compose.ui)
+                implementation(libs.compose.components.resources)
+                implementation(libs.compose.uiToolingPreview)
+                implementation(libs.androidx.lifecycle.viewmodelCompose)
+                implementation(libs.androidx.lifecycle.runtimeCompose)
+                implementation(libs.sqldelight.runtime)
+                implementation(libs.androidx.datastore.preferences.core)
+                implementation(libs.kotlinx.coroutines.core)
+                implementation(project.dependencies.platform(libs.koin.bom))
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose)
+                implementation(libs.koin.compose.viewmodel)
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
+                implementation(libs.ktor.client.logging)
+                implementation(libs.coil.compose)
+                implementation(libs.coil.network.ktor3)
+                implementation(libs.qrose)
+                implementation(project.dependencies.platform(libs.supabase.bom))
+                implementation(libs.supabase.auth)
+            }
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
         }
         iosMain.dependencies {
             implementation(libs.sqldelight.native.driver)

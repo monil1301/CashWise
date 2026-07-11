@@ -70,10 +70,10 @@
     <string name="set_pin_create_title">Create PIN</string>
     <string name="set_pin_confirm_title">Confirm PIN</string>
     <string name="set_pin_create_heading">Create a 6-digit PIN</string>
-    <string name="set_pin_create_description">You\'ll use this to unlock Cashwise.</string>
+    <string name="set_pin_create_description">You'll use this to unlock Cashwise.</string>
     <string name="set_pin_confirm_heading">Re-enter your PIN</string>
     <string name="set_pin_confirm_description">Enter the same 6-digit PIN again to confirm.</string>
-    <string name="set_pin_mismatch">Those don\'t match. Try again.</string>
+    <string name="set_pin_mismatch">Those don't match. Try again.</string>
     <string name="set_pin_start_over">Start over</string>
     <string name="set_pin_backspace">Delete</string>
     <string name="set_pin_brand_tagline">Your security is our priority</string>
@@ -92,7 +92,7 @@
     <string name="setup_budget_set">Set budget</string>
     <string name="setup_budget_skip">Skip for now</string>
     <string name="setup_invite_title">Invite members</string>
-    <string name="setup_invite_description">Add people to your shared wallet. You control each person\'s role.</string>
+    <string name="setup_invite_description">Add people to your shared wallet. You control each person's role.</string>
     <string name="setup_invite_members_label">Members</string>
     <string name="setup_invite_member_you">You</string>
     <string name="setup_invite_role_owner">Owner</string>
@@ -118,7 +118,32 @@
     <string name="invite_reset">Reset link</string>
     <string name="setup_illustration_placeholder">Step illustration</string>
     <string name="setup_step_placeholder_title">More setup coming soon</string>
-    <string name="setup_step_placeholder_description">This step isn\'t built yet.</string>
+    <string name="setup_step_placeholder_description">This step isn't built yet.</string>
+    <!-- End -->
+
+    <!-- Sign in to Sync -->
+    <string name="sign_in_title">Sign in to Sync</string>
+    <string name="sign_in_sync_banner">Sync across devices, share wallets, and back up your data.</string>
+    <string name="sign_in_continue_google">Continue with Google</string>
+    <string name="sign_in_or">or</string>
+    <string name="sign_in_continue_email">Continue with Email</string>
+    <string name="sign_in_use_phone_otp">Use Phone (OTP) instead</string>
+    <string name="sign_in_footer_hint">Use the same sign-in on all your devices.</string>
+    <string name="sign_in_signing_in">Signing in…</string>
+    <string name="sign_in_error_generic">Couldn't sign in. Please try again.</string>
+    <string name="sign_in_not_implemented">This sign-in method is coming soon.</string>
+    <string name="sign_in_email_heading">Continue with email</string>
+    <string name="sign_in_email_subtitle">We'll email you a 6-digit code to sign in.</string>
+    <string name="sign_in_email_label">Email</string>
+    <string name="sign_in_email_placeholder">you@example.com</string>
+    <string name="sign_in_email_send">Send code</string>
+    <string name="sign_in_email_send_failed">Couldn't send the code. Check the address and try again.</string>
+    <string name="sign_in_code_heading">Enter your code</string>
+    <string name="sign_in_code_subtitle">Enter the 6-digit code sent to %1$s</string>
+    <string name="sign_in_code_label">6-digit code</string>
+    <string name="sign_in_code_verify">Verify</string>
+    <string name="sign_in_code_resend">Resend code</string>
+    <string name="sign_in_code_invalid">That code didn't work. Check it and try again.</string>
     <!-- End -->
 
     <!-- Currencies -->

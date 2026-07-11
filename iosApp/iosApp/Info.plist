@@ -4,5 +4,17 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<!-- OAuth redirect scheme for Supabase Auth (com.shah.cashwise://auth-callback). -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.shah.cashwise.auth</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.shah.cashwise</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>
