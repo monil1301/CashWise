@@ -23,6 +23,10 @@ val SoftRedContainerDark = Color(0xFF7F1D1D)
 
 val Amber = Color(0xFFF59E0B)
 val AmberDark = Color(0xFFFCD34D)
+val AmberContainer = Color(0xFFFEF3C7)
+val OnAmberContainer = Color(0xFF92400E)
+val AmberContainerDark = Color(0xFF78350F)
+val OnAmberContainerDark = Color(0xFFFDE68A)
 
 val SurfaceWhite = Color(0xFFFFFFFF)
 val SurfaceOffWhite = Color(0xFFF8FAFC)
@@ -36,15 +40,27 @@ val OnSurfaceDark = Color(0xFFF8FAFC)
 val OnSurfaceVariantDark = Color(0xFFCBD5E1)
 val OutlineDark = Color(0xFF334155)
 
+/**
+ * Colours Material's scheme has no slot for.
+ *
+ * [warning]/[onWarning] are a solid fill and its content colour; [warningContainer] and
+ * [onWarningContainer] are the muted pair, mirroring Material's own container convention.
+ * Both pairs exist because they are not interchangeable: [onWarning] is near-black, which is
+ * legible on solid amber and illegible on a tinted one.
+ */
 @Immutable
 data class CashWiseSupportColors(
     val warning: Color,
     val onWarning: Color,
+    val warningContainer: Color,
+    val onWarningContainer: Color,
 )
 
 internal val LocalCashWiseSupportColors = staticCompositionLocalOf {
     CashWiseSupportColors(
         warning = Amber,
         onWarning = OnSurfaceCharcoal,
+        warningContainer = AmberContainer,
+        onWarningContainer = OnAmberContainer,
     )
 }

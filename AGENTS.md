@@ -86,14 +86,23 @@ Do NOT create a separate `ui/viewmodels` folder for feature ViewModels.
 
 ## Global App Shell (Enforced)
 
-Mobile:
-- Bottom tabs: Home, Transactions, Budgets, Insights (4 tabs).
-- Top-right: Avatar/Initial button opens Account/Settings sheet.
-- Wallet selection is accessible from the top bar (or within filters where appropriate).
+Top-level destinations: **Home, Transactions, Budgets, Insights, Settings** (5). Defined once in `app/shell/ShellTab.kt`; the phone's bottom bar, the medium rail, and the tablet drawer all render `ShellTab.entries`, so they cannot drift apart. Add a tab there and it appears in all three.
 
-Tablet/Desktop:
-- Left navigation rail/drawer mirrors the same top-level destinations.
+Mobile (Compact):
+- Bottom tabs, all five.
+- Top-left: wallet chip (avatar + name) opens the wallet picker.
+- Top-right: search icon, overflow, and the sync indicator.
+- Add transaction: FAB, bottom-right.
+
+Tablet/Desktop (Expanded):
+- Permanent left drawer: wallet card (name + type), "Add transaction" button, the same five tabs, then the wallet's accounts with balances.
+- Top bar: a search field and overflow. No wallet chip — the wallet lives in the drawer.
+- Content splits into a primary pane and an optional detail pane above 900dp.
 - Keep screen content max widths sane (avoid stretched text).
+
+Sync indicator (Enforced):
+- `SyncStatus.Synced` shows **only** a small green dot on the wallet avatar — never a "SYNCED" pill. A permanent success badge is chrome users learn to ignore, which defeats the pill when it matters.
+- Every other state (`Syncing`, `Offline`, `Error`) shows a labelled pill in the top bar, and no dot. The two are mutually exclusive.
 
 ## Responsive Layout (Enforced)
 

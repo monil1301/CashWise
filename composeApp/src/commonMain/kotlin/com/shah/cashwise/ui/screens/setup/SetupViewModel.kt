@@ -10,9 +10,9 @@ import com.shah.cashwise.domain.model.Wallet
 import com.shah.cashwise.domain.repo.AppLockRepository
 import com.shah.cashwise.domain.repo.AppPreferencesRepository
 import com.shah.cashwise.domain.repo.WalletRepository
+import com.shah.cashwise.ui.components.icon
 import com.shah.cashwise.ui.screens.setup.model.CustomAccountDraft
 import com.shah.cashwise.ui.screens.setup.model.SetupAccount
-import com.shah.cashwise.ui.screens.setup.model.icon
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

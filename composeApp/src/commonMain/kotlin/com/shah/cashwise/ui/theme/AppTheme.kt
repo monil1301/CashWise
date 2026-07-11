@@ -22,11 +22,15 @@ fun CashWiseTheme(
         CashWiseSupportColors(
             warning = AmberDark,
             onWarning = SurfaceDark,
+            warningContainer = AmberContainerDark,
+            onWarningContainer = OnAmberContainerDark,
         )
     } else {
         CashWiseSupportColors(
             warning = Amber,
             onWarning = OnSurfaceCharcoal,
+            warningContainer = AmberContainer,
+            onWarningContainer = OnAmberContainer,
         )
     }
 

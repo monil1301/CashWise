@@ -10,7 +10,7 @@ import cashwise.composeapp.generated.resources.Res
 import cashwise.composeapp.generated.resources.next
 import cashwise.composeapp.generated.resources.onboarding_get_started
 import cashwise.composeapp.generated.resources.skip
-import com.shah.cashwise.ui.screens.home.HomeScreen
+import com.shah.cashwise.app.shell.AppShell
 import com.shah.cashwise.ui.screens.onboarding.OnboardingPage
 import com.shah.cashwise.ui.screens.onboarding.OnboardingScreen
 import com.shah.cashwise.ui.screens.setup.SetupScreen
@@ -78,10 +78,8 @@ fun NavGraphBuilder.appNavGraph(
     }
 
     composable<Destination.Home> {
-        HomeScreen(
-            modifier = Modifier
-                .safeContentPadding()
-                .fillMaxSize(),
-        )
+        // No safeContentPadding here, unlike the gates above: the shell is full-bleed by
+        // design, and its Scaffold hands the insets to the bars and content that need them.
+        AppShell(modifier = Modifier.fillMaxSize())
     }
 }

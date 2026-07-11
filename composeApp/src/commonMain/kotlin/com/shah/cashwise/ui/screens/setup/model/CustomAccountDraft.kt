@@ -1,24 +1,6 @@
 package com.shah.cashwise.ui.screens.setup.model
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccountBalance
-import androidx.compose.material.icons.outlined.AccountBalanceWallet
-import androidx.compose.material.icons.outlined.CreditCard
-import androidx.compose.material.icons.outlined.Payments
-import androidx.compose.material.icons.outlined.Savings
-import androidx.compose.material.icons.outlined.Wallet
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.shah.cashwise.domain.model.CustomAccountIcon
-
-/** The vector glyph for a [CustomAccountIcon]. */
-fun CustomAccountIcon.icon(): ImageVector = when (this) {
-    CustomAccountIcon.Cash -> Icons.Outlined.Payments
-    CustomAccountIcon.Bank -> Icons.Outlined.AccountBalance
-    CustomAccountIcon.Card -> Icons.Outlined.CreditCard
-    CustomAccountIcon.Wallet -> Icons.Outlined.AccountBalanceWallet
-    CustomAccountIcon.Savings -> Icons.Outlined.Savings
-    CustomAccountIcon.Pocket -> Icons.Outlined.Wallet
-}
 
 /**
  * The form result emitted when the user confirms the add-custom-account form.

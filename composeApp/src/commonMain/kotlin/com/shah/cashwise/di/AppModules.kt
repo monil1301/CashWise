@@ -1,6 +1,7 @@
 package com.shah.cashwise.di
 
 import com.shah.cashwise.app.AppViewModel
+import com.shah.cashwise.app.shell.ShellViewModel
 import com.shah.cashwise.core.config.SupabaseConfig
 import app.cash.sqldelight.db.SqlDriver
 import com.shah.cashwise.core.utils.ioDispatcher
@@ -12,10 +13,12 @@ import com.shah.cashwise.data.repo.AppPreferencesRepositoryImpl
 import com.shah.cashwise.data.repo.AuthRepositoryImpl
 import com.shah.cashwise.data.repo.OfflineAuthRepository
 import com.shah.cashwise.data.repo.WalletRepositoryImpl
+import com.shah.cashwise.data.sync.StubSyncStatusRepository
 import com.shah.cashwise.db.CashWiseDatabase
 import com.shah.cashwise.domain.repo.AppLockRepository
 import com.shah.cashwise.domain.repo.AppPreferencesRepository
 import com.shah.cashwise.domain.repo.AuthRepository
+import com.shah.cashwise.domain.repo.SyncStatusRepository
 import com.shah.cashwise.domain.repo.WalletRepository
 import com.shah.cashwise.ui.screens.onboarding.OnboardingViewModel
 import com.shah.cashwise.ui.screens.setpin.SetPinViewModel
@@ -32,6 +35,14 @@ import org.koin.dsl.module
 
 private val appModule = module {
     viewModelOf(::AppViewModel)
+}
+
+private val shellModule = module {
+    // Sync is not implemented, so the shell reads its status from a stub that reports
+    // "nothing outstanding". Swap this binding when the engine lands — see
+    // StubSyncStatusRepository.
+    single<SyncStatusRepository> { StubSyncStatusRepository() }
+    viewModelOf(::ShellViewModel)
 }
 
 private val dataModule = module {
@@ -94,6 +105,7 @@ val appModules = listOf(
     dataModule,
     authModule,
     appModule,
+    shellModule,
     onboardingModule,
     setupModule,
     setPinModule,

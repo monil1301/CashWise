@@ -20,9 +20,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cashwise.composeapp.generated.resources.Res
 import cashwise.composeapp.generated.resources.setup_account_balance_placeholder
+import com.shah.cashwise.ui.components.icon
+import com.shah.cashwise.ui.components.nameRes
 import com.shah.cashwise.ui.screens.setup.model.SetupAccount
-import com.shah.cashwise.ui.screens.setup.model.icon
-import com.shah.cashwise.ui.screens.setup.model.nameRes
 import org.jetbrains.compose.resources.stringResource
 
 /**
