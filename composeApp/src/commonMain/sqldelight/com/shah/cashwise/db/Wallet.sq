@@ -1,0 +1,22 @@
+-- A wallet is the aggregate root: accounts and budgets belong to one.
+-- `type` stores WalletType.name, `currencyCode` an ISO 4217 code (e.g. "INR").
+CREATE TABLE wallet (
+    id           TEXT    NOT NULL PRIMARY KEY,
+    name         TEXT    NOT NULL,
+    type         TEXT    NOT NULL,
+    currencyCode TEXT    NOT NULL,
+    createdAt    INTEGER NOT NULL
+);
+
+insert:
+INSERT INTO wallet(id, name, type, currencyCode, createdAt)
+VALUES (?, ?, ?, ?, ?);
+
+selectAll:
+SELECT * FROM wallet ORDER BY createdAt ASC;
+
+countAll:
+SELECT count(*) FROM wallet;
+
+deleteAll:
+DELETE FROM wallet;

@@ -33,9 +33,9 @@ import cashwise.composeapp.generated.resources.setup_custom_account_close
 import cashwise.composeapp.generated.resources.setup_custom_account_icon_label
 import cashwise.composeapp.generated.resources.setup_custom_account_name_label
 import cashwise.composeapp.generated.resources.setup_custom_account_name_placeholder
+import com.shah.cashwise.domain.model.CustomAccountIcon
 import com.shah.cashwise.ui.components.LabeledField
 import com.shah.cashwise.ui.screens.setup.model.CustomAccountDraft
-import com.shah.cashwise.ui.screens.setup.model.CustomAccountIcon
 import com.shah.cashwise.ui.screens.setup.model.icon
 import org.jetbrains.compose.resources.stringResource
 

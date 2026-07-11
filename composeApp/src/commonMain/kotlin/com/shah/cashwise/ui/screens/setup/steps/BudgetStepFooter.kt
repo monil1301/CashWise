@@ -17,14 +17,16 @@ import com.shah.cashwise.ui.screens.setup.SetupAction
 import org.jetbrains.compose.resources.stringResource
 
 /**
- * Pinned footer for the [SetBudgetStep] — "Set budget" (finishes setup with
- * the entered values, enabled only when [submitEnabled]) and "Skip for now"
- * (finishes setup without recording a budget; always enabled). Both currently
- * complete setup; persistence is a TODO.
+ * Pinned footer for the [SetBudgetStep] — "Set budget" (finishes setup with the entered
+ * values, enabled only when [submitEnabled]) and "Skip for now" (finishes setup without
+ * recording a budget). On a Solo wallet this is the last step, so both buttons commit the
+ * setup to the database; they are disabled while [saving] so a second tap cannot start a
+ * second write.
  */
 @Composable
 internal fun BudgetStepFooter(
     submitEnabled: Boolean,
+    saving: Boolean,
     onAction: (SetupAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -35,12 +37,13 @@ internal fun BudgetStepFooter(
         PrimaryButton(
             text = stringResource(Res.string.setup_budget_set),
             onClick = { onAction(SetupAction.BudgetSet) },
-            enabled = submitEnabled,
+            enabled = submitEnabled && !saving,
             modifier = Modifier.fillMaxWidth(),
         )
 
         TextButton(
             onClick = { onAction(SetupAction.BudgetSkipped) },
+            enabled = !saving,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(

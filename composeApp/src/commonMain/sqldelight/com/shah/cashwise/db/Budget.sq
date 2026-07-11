@@ -1,0 +1,24 @@
+-- A spending limit for one category within a wallet. Setup creates at most one
+-- (the user can skip it), but the schema allows many so later screens can add more.
+--
+-- `category` stores BudgetCategory.name. `limitMinor` is INTEGER minor units, as
+-- with account balances — never a float.
+CREATE TABLE budget (
+    id         TEXT    NOT NULL PRIMARY KEY,
+    walletId   TEXT    NOT NULL,
+    category   TEXT    NOT NULL,
+    limitMinor INTEGER NOT NULL,
+    FOREIGN KEY (walletId) REFERENCES wallet(id) ON DELETE CASCADE
+);
+
+CREATE INDEX budget_walletId ON budget(walletId);
+
+insert:
+INSERT INTO budget(id, walletId, category, limitMinor)
+VALUES (?, ?, ?, ?);
+
+selectByWallet:
+SELECT * FROM budget WHERE walletId = ?;
+
+selectAll:
+SELECT * FROM budget;

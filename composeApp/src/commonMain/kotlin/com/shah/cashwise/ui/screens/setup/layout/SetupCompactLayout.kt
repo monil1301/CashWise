@@ -76,6 +76,13 @@ internal fun SetupCompactLayout(
             Spacer(modifier = Modifier.height(24.dp))
         }
 
+        SetupSaveStatus(
+            state = state,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = HorizontalGutter),
+        )
+
         if (setupStepHasOwnFooter(state.currentStep)) {
             SetupStepFooter(
                 state = state,
@@ -89,7 +96,7 @@ internal fun SetupCompactLayout(
             PrimaryButton(
                 text = stringResource(Res.string.continue_action),
                 onClick = { onAction(SetupAction.Continue) },
-                enabled = state.canContinue,
+                enabled = state.canContinue && !state.isSaving,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = HorizontalGutter)

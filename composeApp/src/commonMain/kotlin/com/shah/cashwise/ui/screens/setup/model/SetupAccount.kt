@@ -14,6 +14,7 @@ import cashwise.composeapp.generated.resources.setup_account_cash
 import cashwise.composeapp.generated.resources.setup_account_custom
 import cashwise.composeapp.generated.resources.setup_account_upi
 import com.shah.cashwise.domain.model.AccountKind
+import com.shah.cashwise.domain.model.CustomAccountIcon
 import org.jetbrains.compose.resources.StringResource
 
 /**

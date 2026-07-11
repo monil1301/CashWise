@@ -8,16 +8,7 @@ import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.Savings
 import androidx.compose.material.icons.outlined.Wallet
 import androidx.compose.ui.graphics.vector.ImageVector
-
-/** A glyph offered by the add-custom-account icon picker. */
-enum class CustomAccountIcon {
-    Cash,
-    Bank,
-    Card,
-    Wallet,
-    Savings,
-    Pocket,
-}
+import com.shah.cashwise.domain.model.CustomAccountIcon
 
 /** The vector glyph for a [CustomAccountIcon]. */
 fun CustomAccountIcon.icon(): ImageVector = when (this) {

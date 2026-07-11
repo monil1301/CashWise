@@ -1,5 +1,6 @@
 package com.shah.cashwise.ui.screens.setup
 
+import com.shah.cashwise.core.extensions.toMinorUnits
 import com.shah.cashwise.domain.model.BudgetCategory
 import com.shah.cashwise.domain.model.Currency
 import com.shah.cashwise.domain.model.DefaultCurrency
@@ -30,6 +31,13 @@ data class SetupState(
     val showSetPin: Boolean = false,
     val selectedBudgetCategory: BudgetCategory = BudgetCategory.FoodAndDining,
     val budgetLimit: String = "",
+    /** True while the finished setup is being written to the database. */
+    val isSaving: Boolean = false,
+    /**
+     * True when persisting the finished setup failed. The user stays on the last
+     * step and can retry — nothing was written, since the write is transactional.
+     */
+    val saveFailed: Boolean = false,
     /**
      * When true the "Invite a member" sheet/dialog is presented as a modal
      * overlay over the current step (typically the Invite Members step on a
@@ -70,5 +78,5 @@ data class SetupState(
      * always available regardless.
      */
     val canSubmitBudget: Boolean
-        get() = (budgetLimit.trim().toDoubleOrNull() ?: 0.0) > 0.0
+        get() = budgetLimit.toMinorUnits() > 0L
 }

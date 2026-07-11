@@ -23,9 +23,14 @@ internal fun SetupStepFooter(
         2 -> LockStepFooter(onAction = onAction, modifier = modifier)
         3 -> BudgetStepFooter(
             submitEnabled = state.canSubmitBudget,
+            saving = state.isSaving,
             onAction = onAction,
             modifier = modifier,
         )
-        4 -> InviteMembersFooter(onAction = onAction, modifier = modifier)
+        4 -> InviteMembersFooter(
+            saving = state.isSaving,
+            onAction = onAction,
+            modifier = modifier,
+        )
     }
 }

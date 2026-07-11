@@ -1,29 +1,51 @@
 package com.shah.cashwise.ui.screens.setup
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.shah.cashwise.core.extensions.toMinorUnits
+import com.shah.cashwise.domain.model.Account
 import com.shah.cashwise.domain.model.AccountKind
+import com.shah.cashwise.domain.model.Budget
+import com.shah.cashwise.domain.model.Wallet
+import com.shah.cashwise.domain.repo.AppLockRepository
+import com.shah.cashwise.domain.repo.AppPreferencesRepository
+import com.shah.cashwise.domain.repo.WalletRepository
 import com.shah.cashwise.ui.screens.setup.model.CustomAccountDraft
 import com.shah.cashwise.ui.screens.setup.model.SetupAccount
 import com.shah.cashwise.ui.screens.setup.model.icon
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlin.time.Clock
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * Navigation outcome of a [SetupAction]. `null` from [SetupViewModel.onAction]
  * means the action was handled in place (state changed, no navigation).
+ *
+ * There is deliberately no `Finished` result: completing setup writes the wallet
+ * and flips the persisted `setupCompleted` flag, and `AppNavigation` moves on by
+ * observing that flag. Keeping one source of truth means the screen can never
+ * navigate away from a setup that failed to save.
  */
 enum class SetupNavResult {
     /** Leave the setup flow (Back pressed on the first step). */
     ExitToWelcome,
-
-    /** The whole setup flow is complete (Continue on the last step). */
-    Finished,
 }
 
-/** Holds [SetupState] and drives step navigation for the setup flow. */
-class SetupViewModel : ViewModel() {
+/**
+ * Holds [SetupState], drives step navigation, and persists the finished setup.
+ */
+@OptIn(ExperimentalUuidApi::class)
+class SetupViewModel(
+    private val walletRepository: WalletRepository,
+    private val appPreferencesRepository: AppPreferencesRepository,
+    private val appLockRepository: AppLockRepository,
+) : ViewModel() {
 
     private val _state = MutableStateFlow(SetupState())
     val state: StateFlow<SetupState> = _state.asStateFlow()
@@ -68,6 +90,8 @@ class SetupViewModel : ViewModel() {
             }
 
             SetupAction.AppLockSkipped -> {
+                // Clear any PIN set earlier in this run — "Not now" must actually mean no lock.
+                viewModelScope.launch { appLockRepository.clearPin() }
                 _state.update { it.copy(appLockEnabled = false) }
                 handleContinue()
             }
@@ -78,8 +102,10 @@ class SetupViewModel : ViewModel() {
             }
 
             is SetupAction.SetPinConfirmed -> {
-                // TODO(persistence): store action.pin once a PIN/secure store exists.
-                _state.update { it.copy(showSetPin = false) }
+                // Store a verifier for the PIN (never the PIN). Deriving it is deliberately
+                // slow, so it happens off the main thread inside the repository.
+                viewModelScope.launch { appLockRepository.setPin(action.pin) }
+                _state.update { it.copy(appLockEnabled = true, showSetPin = false) }
                 handleContinue()
             }
 
@@ -98,10 +124,9 @@ class SetupViewModel : ViewModel() {
                 null
             }
 
-            SetupAction.BudgetSet -> {
-                // TODO(persistence): write category + limit to a budgets store.
-                handleContinue()
-            }
+            // The chosen category/limit already live in state and are written by
+            // persistSetup() when the flow finishes; skipping clears the limit.
+            SetupAction.BudgetSet -> handleContinue()
 
             SetupAction.BudgetSkipped -> {
                 _state.update { it.copy(budgetLimit = "") }
@@ -162,10 +187,78 @@ class SetupViewModel : ViewModel() {
 
     private fun handleContinue(): SetupNavResult? {
         val current = _state.value
-        if (!current.canContinue) return null
-        if (current.isLastStep) return SetupNavResult.Finished
+        if (!current.canContinue || current.isSaving) return null
+        if (current.isLastStep) {
+            persistSetup()
+            return null
+        }
 
         _state.update { it.copy(currentStep = it.currentStep + 1) }
         return null
     }
+
+    /**
+     * Writes the finished setup: the app-lock preference first, then the wallet with its
+     * enabled accounts and optional budget in a single transaction.
+     *
+     * Ordering is deliberate. Storing the wallet is what marks setup complete (navigation
+     * observes `WalletRepository.hasWallet`), so it is the *last* thing written and the
+     * only decisive one. Nothing runs after it, which means there is no window in which
+     * this coroutine can be cancelled — by the screen being torn down, or by process death
+     * — between "wallet committed" and "some second store agreed it was committed". A
+     * failure leaves nothing written and the user on the last step with their input intact.
+     *
+     * [SetupState.isSaving] is deliberately NOT cleared on success: navigation away is
+     * asynchronous, and re-enabling the button in the meantime would let a second tap write
+     * a second wallet.
+     */
+    private fun persistSetup() {
+        val current = _state.value
+        _state.update { it.copy(isSaving = true, saveFailed = false) }
+        viewModelScope.launch {
+            val result = runCatching {
+                appPreferencesRepository.setAppLockEnabled(current.appLockEnabled)
+            }.mapCatching {
+                walletRepository.createWallet(buildWallet(current)).getOrThrow()
+            }
+            result.onFailure { error ->
+                if (error is CancellationException) throw error
+                _state.update { it.copy(isSaving = false, saveFailed = true) }
+            }
+            // Success: keep isSaving = true. The new wallet flips hasWallet, AppState
+            // updates, and AppNavigation leaves this screen.
+        }
+    }
+
+    /** Maps the collected [SetupState] into the domain [Wallet] aggregate to store. */
+    private fun buildWallet(state: SetupState): Wallet = Wallet(
+        id = Uuid.random().toString(),
+        name = state.walletName.trim(),
+        type = state.walletType,
+        currency = state.selectedCurrency,
+        createdAt = Clock.System.now().toEpochMilliseconds(),
+        // Only accounts the user left switched on are real accounts.
+        accounts = state.accounts.filter { it.enabled }.map { account ->
+            Account(
+                id = Uuid.random().toString(),
+                kind = account.kind,
+                startingBalanceMinor = account.startingBalance.toMinorUnits(),
+                customName = account.customName.takeIf { account.kind == AccountKind.Custom },
+                customIcon = account.customIcon.takeIf { account.kind == AccountKind.Custom },
+            )
+        },
+        // The budget step is skippable, so a blank/zero limit means no budget.
+        budgets = state.budgetLimit.toMinorUnits()
+            .takeIf { it > 0L }
+            ?.let { limitMinor ->
+                listOf(
+                    Budget(
+                        id = Uuid.random().toString(),
+                        category = state.selectedBudgetCategory,
+                        limitMinor = limitMinor,
+                    ),
+                )
+            }
+            .orEmpty(),
+    )
 }

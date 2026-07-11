@@ -18,12 +18,15 @@ import com.shah.cashwise.ui.screens.setup.SetupAction
 import org.jetbrains.compose.resources.stringResource
 
 /**
- * Pinned footer for the [InviteMembersStep] — the "Done" button finishes
- * setup (members can be added later from wallet settings); the caption sits
- * beneath as a reassurance.
+ * Pinned footer for the [InviteMembersStep] — the "Done" button finishes setup (members
+ * can be added later from wallet settings); the caption sits beneath as a reassurance.
+ *
+ * This is the last step of a Shared wallet, so Done commits the setup to the database and
+ * is disabled while [saving] so a second tap cannot start a second write.
  */
 @Composable
 internal fun InviteMembersFooter(
+    saving: Boolean,
     onAction: (SetupAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -35,6 +38,7 @@ internal fun InviteMembersFooter(
         PrimaryButton(
             text = stringResource(Res.string.setup_invite_done),
             onClick = { onAction(SetupAction.InviteMembersDone) },
+            enabled = !saving,
             modifier = Modifier.fillMaxWidth(),
         )
 

@@ -11,6 +11,11 @@ import com.shah.cashwise.domain.model.AuthSessionStatus
 data class AppState(
     val isLoading: Boolean = true,
     val onboardingCompleted: Boolean = false,
+    /**
+     * Whether the setup flow was completed on a previous launch. Persisted (not
+     * session state), so a completed setup is never replayed from step 1.
+     */
+    val setupCompleted: Boolean = false,
     val sessionStatus: AuthSessionStatus = AuthSessionStatus.Loading,
 ) {
     /** True once a valid auth session exists. */

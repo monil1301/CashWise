@@ -2,11 +2,21 @@ package com.shah.cashwise.di
 
 import com.shah.cashwise.app.AppViewModel
 import com.shah.cashwise.core.config.SupabaseConfig
+import app.cash.sqldelight.db.SqlDriver
+import com.shah.cashwise.core.utils.ioDispatcher
+import com.shah.cashwise.data.local.SecureStore
+import com.shah.cashwise.data.local.createSecureStore
+import com.shah.cashwise.data.local.createSqlDriver
+import com.shah.cashwise.data.repo.AppLockRepositoryImpl
 import com.shah.cashwise.data.repo.AppPreferencesRepositoryImpl
 import com.shah.cashwise.data.repo.AuthRepositoryImpl
 import com.shah.cashwise.data.repo.OfflineAuthRepository
+import com.shah.cashwise.data.repo.WalletRepositoryImpl
+import com.shah.cashwise.db.CashWiseDatabase
+import com.shah.cashwise.domain.repo.AppLockRepository
 import com.shah.cashwise.domain.repo.AppPreferencesRepository
 import com.shah.cashwise.domain.repo.AuthRepository
+import com.shah.cashwise.domain.repo.WalletRepository
 import com.shah.cashwise.ui.screens.onboarding.OnboardingViewModel
 import com.shah.cashwise.ui.screens.setpin.SetPinViewModel
 import com.shah.cashwise.ui.screens.setup.SetupViewModel
@@ -15,6 +25,7 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
 import org.koin.core.context.startKoin
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
@@ -25,6 +36,17 @@ private val appModule = module {
 
 private val dataModule = module {
     single<AppPreferencesRepository> { AppPreferencesRepositoryImpl(get()) }
+
+    // Secrets go to the platform's protected store (Keychain on iOS), never the plain
+    // preferences file. See SecureStore.
+    single<SecureStore> { createSecureStore(get()) }
+    single<AppLockRepository> { AppLockRepositoryImpl(get(), ioDispatcher) }
+
+    // One driver and one database for the whole app. The driver is bound (not created
+    // inline) so it stays in the graph and can be closed — SqlDriver is Closeable.
+    single<SqlDriver> { createSqlDriver() }
+    single<CashWiseDatabase> { CashWiseDatabase(get()) }
+    single<WalletRepository> { WalletRepositoryImpl(get(), ioDispatcher) }
 }
 
 /**
@@ -60,7 +82,7 @@ private val onboardingModule = module {
 }
 
 private val setupModule = module {
-    viewModelOf(::SetupViewModel)
+    viewModel { SetupViewModel(get(), get(), get()) }
 }
 
 private val setPinModule = module {

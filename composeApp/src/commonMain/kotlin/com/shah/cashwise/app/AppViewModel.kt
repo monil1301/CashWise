@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shah.cashwise.domain.repo.AppPreferencesRepository
 import com.shah.cashwise.domain.repo.AuthRepository
+import com.shah.cashwise.domain.repo.WalletRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -17,16 +18,21 @@ import kotlinx.coroutines.launch
  */
 class AppViewModel(
     private val appPreferencesRepository: AppPreferencesRepository,
+    private val walletRepository: WalletRepository,
     private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     val state: StateFlow<AppState> = combine(
         appPreferencesRepository.onboardingCompleted,
+        // Setup completion is derived from the database, not a separate flag: the wallet
+        // is what setup produces, so it cannot disagree with itself. See WalletRepository.
+        walletRepository.hasWallet,
         authRepository.sessionStatus,
-    ) { onboardingCompleted, sessionStatus ->
+    ) { onboardingCompleted, setupCompleted, sessionStatus ->
         AppState(
             isLoading = false,
             onboardingCompleted = onboardingCompleted,
+            setupCompleted = setupCompleted,
             sessionStatus = sessionStatus,
         )
     }.stateIn(

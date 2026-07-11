@@ -96,6 +96,11 @@ internal fun SetupExpandedLayout(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
+                SetupSaveStatus(
+                    state = state,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+
                 if (setupStepHasOwnFooter(state.currentStep)) {
                     SetupStepFooter(
                         state = state,
@@ -106,7 +111,7 @@ internal fun SetupExpandedLayout(
                     PrimaryButton(
                         text = stringResource(Res.string.continue_action),
                         onClick = { onAction(SetupAction.Continue) },
-                        enabled = state.canContinue,
+                        enabled = state.canContinue && !state.isSaving,
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }

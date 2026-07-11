@@ -1,0 +1,29 @@
+-- Money accounts within a wallet (Cash / UPI / Bank / Card / Custom).
+--
+-- `kind` stores AccountKind.name. `customName` and `customIcon` are only set for
+-- AccountKind.Custom and are NULL for the preset kinds.
+--
+-- Balances are stored as INTEGER *minor units* (e.g. paise), never floats, so
+-- arithmetic stays exact. `position` preserves the order shown during setup.
+CREATE TABLE account (
+    id                   TEXT    NOT NULL PRIMARY KEY,
+    walletId             TEXT    NOT NULL,
+    kind                 TEXT    NOT NULL,
+    customName           TEXT,
+    customIcon           TEXT,
+    startingBalanceMinor INTEGER NOT NULL DEFAULT 0,
+    position             INTEGER NOT NULL,
+    FOREIGN KEY (walletId) REFERENCES wallet(id) ON DELETE CASCADE
+);
+
+CREATE INDEX account_walletId ON account(walletId);
+
+insert:
+INSERT INTO account(id, walletId, kind, customName, customIcon, startingBalanceMinor, position)
+VALUES (?, ?, ?, ?, ?, ?, ?);
+
+selectByWallet:
+SELECT * FROM account WHERE walletId = ? ORDER BY position ASC;
+
+selectAll:
+SELECT * FROM account ORDER BY position ASC;
